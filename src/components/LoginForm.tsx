@@ -50,9 +50,11 @@ const LoginForm: React.FC = () => {
 
     try {
       const { data } = await axios.post('http://localhost:5000/api/auth/login', { email, password });
+      console.log("🚀 ~ handleSubmit ~ data:", data)
       localStorage.setItem('token', data.token);
+      localStorage.setItem('user', data.user.username);
       alert('Login successful!');
-      router.push('/');
+      router.push('/task');
     } catch (err) {
       setError('Login failed. Please check your credentials.');
     } finally {

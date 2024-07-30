@@ -5,12 +5,20 @@ import Image from 'next/image';
 import trelloIcon from '../../public/trello-icon.png'; // Adjust the path if necessary
 
 const SignupForm: React.FC = () => {
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
+
+  const capitalizeWords = (str: string) => {
+    return str
+      .split(' ')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(' ');
+  };
 
   const validatePassword = (password: string) => {
     // Regex for password validation
@@ -24,8 +32,8 @@ const SignupForm: React.FC = () => {
     setError('');
 
     // Basic validation
-    if (!email || !password || !confirmPassword) {
-      setError('Email, password, and confirm password are required.');
+    if (!username || !email || !password || !confirmPassword) {
+      setError('Username, email, password, and confirm password are required.');
       setIsSubmitting(false);
       return;
     }
@@ -53,7 +61,8 @@ const SignupForm: React.FC = () => {
     }
 
     try {
-      await axios.post('http://localhost:5000/api/auth/signup', { email, password, confirmPassword });
+      const formattedUsername = capitalizeWords(username);
+      await axios.post('http://localhost:5000/api/auth/signup', { username: formattedUsername, email, password, confirmPassword });
       alert('Signup successful!');
       router.push('/');
     } catch (err) {
@@ -76,7 +85,19 @@ const SignupForm: React.FC = () => {
 
       <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-md w-full max-w-md mx-auto">
         {error && <p className="text-red-500 mb-4 text-center">{error}</p>}
-        
+
+        <label className="block mb-4">
+          <span className="text-gray-700 text-sm font-medium">Username</span>
+          <input
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            className="mt-1 block w-full border-gray-300 shadow-sm bg-gray-50 text-black placeholder-gray-400 pl-2 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="Enter your username"
+            required
+          />
+        </label>
+
         <label className="block mb-4">
           <span className="text-gray-700 text-sm font-medium">Email</span>
           <input
@@ -88,7 +109,7 @@ const SignupForm: React.FC = () => {
             required
           />
         </label>
-        
+
         <label className="block mb-4">
           <span className="text-gray-700 text-sm font-medium">Password</span>
           <input
@@ -112,7 +133,7 @@ const SignupForm: React.FC = () => {
             required
           />
         </label>
-        
+
         <button 
           type="submit" 
           className="bg-blue-500 text-white p-2 rounded-lg w-full hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
