@@ -5,6 +5,7 @@ import axiosInstance from '../utils/axiosConfig';
 import TaskColumn from './TaskColumn';
 import Sidebar from './Sidebar';
 import Header from './Header';
+import CreateTaskModal from './CreateTaskModal';
 
 interface Task {
   _id: string;
@@ -19,19 +20,20 @@ const TaskBoard: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const fetchTasks = async () => {
+    try {
+      const { data } = await axiosInstance.get('/tasks');
+      setTasks(data);
+    } catch (err) {
+      setError('Failed to fetch tasks.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchTasks = async () => {
-      try {
-        const { data } = await axiosInstance.get('/tasks');
-        setTasks(data);
-      } catch (err) {
-        setError('Failed to fetch tasks.');
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchTasks();
   }, []);
 
@@ -46,6 +48,11 @@ const TaskBoard: React.FC = () => {
     }
   };
 
+  const handleTaskCreated = () => {
+    setIsModalOpen(false);
+    fetchTasks();
+  };
+
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
 
@@ -53,7 +60,7 @@ const TaskBoard: React.FC = () => {
     <div className="flex min-h-screen bg-gray-100">
       <Sidebar />
       <div className="flex-grow p-4">
-        <Header />
+        <Header onCreateNewTask={() => setIsModalOpen(true)} />
         <div className="grid grid-cols-4 gap-4 mt-8">
           {['To-Do', 'In Progress', 'Under Review', 'Completed'].map((column) => (
             <TaskColumn
@@ -61,10 +68,16 @@ const TaskBoard: React.FC = () => {
               title={column}
               tasks={tasks.filter((task) => task.status === column)}
               updateTaskStatus={updateTaskStatus}
+              onCreateNewTask={() => setIsModalOpen(true)}
             />
           ))}
         </div>
       </div>
+      <CreateTaskModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onTaskCreated={handleTaskCreated}
+      />
     </div>
   );
 };

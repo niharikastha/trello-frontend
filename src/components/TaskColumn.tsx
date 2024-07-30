@@ -16,9 +16,10 @@ interface TaskColumnProps {
   title: string;
   tasks: Task[];
   updateTaskStatus: (taskId: string, status: string) => void;
+  onCreateNewTask: () => void;
 }
 
-const TaskColumn: React.FC<TaskColumnProps> = ({ title, tasks, updateTaskStatus }) => {
+const TaskColumn: React.FC<TaskColumnProps> = ({ title, tasks, updateTaskStatus, onCreateNewTask }) => {
   return (
     <div className="bg-white rounded-lg shadow-md p-4">
       <h2 className="text-lg font-semibold mb-4 text-gray-800">{title}</h2>
@@ -27,7 +28,10 @@ const TaskColumn: React.FC<TaskColumnProps> = ({ title, tasks, updateTaskStatus 
           <TaskCard key={task._id} task={task} updateTaskStatus={updateTaskStatus} />
         ))}
       </ul>
-      <button className="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 mt-4 rounded">
+      <button 
+        onClick={onCreateNewTask}
+        className="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 mt-4 rounded"
+      >
         Add new
       </button>
     </div>

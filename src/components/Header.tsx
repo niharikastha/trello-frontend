@@ -1,15 +1,18 @@
 // components/Header.tsx
 import React, { useEffect, useState } from 'react';
-import { FaTags, FaShareAlt, FaMobileAlt, FaSearch,FaPlus, FaCalendarAlt, FaStar, FaFilter, FaShareSquare, FaQuestionCircle } from 'react-icons/fa';
+import { FaTags, FaShareAlt, FaMobileAlt, FaSearch, FaPlus, FaCalendarAlt, FaStar, FaFilter, FaShareSquare, FaQuestionCircle } from 'react-icons/fa';
 
-const Header: React.FC = () => {
+interface HeaderProps {
+  onCreateNewTask: () => void;
+}
+
+const Header: React.FC<HeaderProps> = ({ onCreateNewTask }) => {
   const [firstName, setFirstName] = useState('');
 
   useEffect(() => {
-    // Fetch user from local storage and set first name
     const user = localStorage.getItem('user') || '';
     const name = user || 'User';
-    const firstName = name.split(' ')[0]; // Get first name
+    const firstName = name.split(' ')[0];
     setFirstName(firstName);
   }, []);
 
@@ -22,8 +25,6 @@ const Header: React.FC = () => {
           <FaQuestionCircle className="text-xl" />
         </button>
       </div>
-      
-      {/* Feature Boxes Row */}
       <div className="flex space-x-4 mb-4">
         <div className="bg-white p-3 rounded shadow-sm flex items-center space-x-2 text-gray-700 flex-1">
           <FaTags className="text-xl text-purple-600" />
@@ -47,18 +48,12 @@ const Header: React.FC = () => {
           </div>
         </div>
       </div>
-
-      {/* Search Bar and Action Buttons Row */}
       <div className="flex items-center space-x-2">
-      <div className="flex items-center w-1/4 bg-white border border-gray-300 rounded p-2">
-          <input
-            type="text"
-            placeholder="Search"
-            className="flex-1 border-none outline-none"
-          />
+        <div className="flex items-center w-1/4 bg-white border border-gray-300 rounded p-2">
+          <input type="text" placeholder="Search" className="flex-1 border-none outline-none" />
           <FaSearch className="text-gray-400 mr-2" />
         </div>
-        <div className="flex-1"></div> {/* Space between search and Calendar view */}
+        <div className="flex-1"></div>
         <button className="flex items-center bg-white text-black border border-gray-300 rounded p-2">
           <FaCalendarAlt className="mr-2" /> Calendar view
         </button>
@@ -71,9 +66,11 @@ const Header: React.FC = () => {
         <button className="flex items-center bg-white text-black border border-gray-300 rounded p-2">
           <FaShareSquare className="mr-2" /> Share
         </button>
-        <button className="flex items-center bg-blue-600 hover:bg-blue-700 text-white py-2 px-5 rounded">
-          <FaPlus className="mr-2" />           Create new
-
+        <button 
+          onClick={onCreateNewTask}
+          className="flex items-center bg-blue-600 hover:bg-blue-700 text-white py-2 px-5 rounded"
+        >
+          <FaPlus className="mr-2" /> Create New Task
         </button>
       </div>
     </div>
