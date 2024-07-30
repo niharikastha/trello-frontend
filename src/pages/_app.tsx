@@ -3,7 +3,7 @@ import '../styles/globals.css';
 import Layout from '../components/Layout';
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
-
+import '../styles/styles.css'
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
 

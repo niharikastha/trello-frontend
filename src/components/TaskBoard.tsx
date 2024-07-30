@@ -13,7 +13,8 @@ interface Task {
   description: string;
   status: string;
   priority: string;
-  dueDate: string;
+  deadline: string;
+  createdAt?: string;
 }
 
 const TaskBoard: React.FC = () => {
@@ -21,6 +22,11 @@ const TaskBoard: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalStatus, setModalStatus] = useState<string>('To-Do');
+
+  useEffect(() => {
+    fetchTasks();
+  }, []);
 
   const fetchTasks = async () => {
     try {
@@ -32,10 +38,6 @@ const TaskBoard: React.FC = () => {
       setLoading(false);
     }
   };
-
-  useEffect(() => {
-    fetchTasks();
-  }, []);
 
   const updateTaskStatus = async (taskId: string, status: string) => {
     try {
@@ -53,22 +55,27 @@ const TaskBoard: React.FC = () => {
     fetchTasks();
   };
 
+  const handleAddNewClick = (status: string) => {
+    setModalStatus(status);
+    setIsModalOpen(true);
+  };
+
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
+    <div className="task-board">
       <Sidebar />
-      <div className="flex-grow p-4">
-        <Header onCreateNewTask={() => setIsModalOpen(true)} />
-        <div className="grid grid-cols-4 gap-4 mt-8">
+      <div className="main-content">
+        <Header onCreateNewTask={() => handleAddNewClick('To-Do')} />
+        <div className="task-columns">
           {['To-Do', 'In Progress', 'Under Review', 'Completed'].map((column) => (
             <TaskColumn
               key={column}
               title={column}
               tasks={tasks.filter((task) => task.status === column)}
               updateTaskStatus={updateTaskStatus}
-              onCreateNewTask={() => setIsModalOpen(true)}
+              onAddNewClick={handleAddNewClick} 
             />
           ))}
         </div>
@@ -77,6 +84,7 @@ const TaskBoard: React.FC = () => {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onTaskCreated={handleTaskCreated}
+        defaultStatus={modalStatus}
       />
     </div>
   );
