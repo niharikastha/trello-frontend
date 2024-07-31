@@ -3,8 +3,8 @@ import { FaTags, FaShareAlt, FaMobileAlt, FaSearch, FaPlus, FaCalendarAlt, FaSta
 
 interface HeaderProps {
   onCreateNewTask: () => void;
-  searchQuery: string; 
-  onSearchChange: (query: string) => void; 
+  searchQuery: string;
+  onSearchChange: (query: string) => void;
 }
 
 const Header: React.FC<HeaderProps> = ({ onCreateNewTask, searchQuery, onSearchChange }) => {
@@ -20,7 +20,7 @@ const Header: React.FC<HeaderProps> = ({ onCreateNewTask, searchQuery, onSearchC
   return (
     <div className="pb-4">
       <div className="flex justify-between items-center mb-4">
-        <h1 className="text-4xl font-bold text-black">Good morning, {firstName}!</h1>
+        <h1 className="text-4xl font-bold text-black">Good morning, {firstName}&apos;s!</h1>
         <button className="flex items-center hover:bg-purple-100 text-black py-2 px-4 rounded space-x-2">
           <span>Help & feedback</span>
           <FaQuestionCircle className="text-xl" />
@@ -45,18 +45,18 @@ const Header: React.FC<HeaderProps> = ({ onCreateNewTask, searchQuery, onSearchC
           <FaMobileAlt className="text-xl text-purple-600" />
           <div>
             <h2 className="font-semibold text-gray-500">Access Anywhere</h2>
-            <p className="text-sm text-gray-400">Sync your notes across all devices. Stay productive whether you're on your phone, tablet, or computer.</p>
+            <p className="text-sm text-gray-400">Sync your notes across all devices. Stay productive whether you&apos;re on your phone, tablet, or computer.</p>
           </div>
         </div>
       </div>
       <div className="flex items-center space-x-2">
         <div className="flex items-center w-1/4 bg-white border border-gray-300 rounded p-2">
-          <input 
-            type="text" 
-            placeholder="Search" 
-            className="flex-1 border-none outline-none text-gray-600" 
+          <input
+            type="text"
+            placeholder="Search"
+            className="flex-1 border-none outline-none text-gray-600"
             value={searchQuery}
-            onChange={(e) => onSearchChange(e.target.value)} 
+            onChange={(e) => onSearchChange(e.target.value)}
           />
           <FaSearch className="text-gray-400 mr-2" />
         </div>
@@ -73,10 +73,10 @@ const Header: React.FC<HeaderProps> = ({ onCreateNewTask, searchQuery, onSearchC
         <button className="flex items-center bg-dark-gray text-black rounded p-2">
           Share  <FaShareSquare className="ml-2" />
         </button>
-        <button 
+        <button
           onClick={onCreateNewTask}
           className="flex items-center text-white py-2 px-4 rounded"
-          style={{ background: 'linear-gradient(180deg, #4C38C2 0%, #2F2188 100%)' }}        
+          style={{ background: 'linear-gradient(180deg, #4C38C2 0%, #2F2188 100%)' }}
         >
           Create New <FaPlus className="ml-2" />
         </button>

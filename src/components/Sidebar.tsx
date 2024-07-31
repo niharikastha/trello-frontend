@@ -38,7 +38,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onCreateNewTask }) => {
   
 
   return (
-    <div className="bg-white p-4 shadow-md">
+<div className="bg-white p-4 shadow-md flex flex-col justify-between items-center h-full">
       <div className={`w-64 flex-col ${isDarkMode ? 'bg-gray-900 text-white' : 'text-black'}`}>
         <div className={`flex items-center justify-center h-30 ${isDarkMode ? 'bg-gray-900 text-white' : 'text-black'}`}>
           <div >

@@ -25,10 +25,16 @@ interface CreateTaskModalProps {
   onClose: () => void;
   onTaskCreated: () => void;
   defaultStatus: string;
-  task?: Task | null; // Optional prop for editing
+  task?: Task | null; 
 }
 
-const CreateTaskModal: React.FC<CreateTaskModalProps> = ({ isOpen, onClose, onTaskCreated, defaultStatus, task }) => {
+const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
+  isOpen,
+  onClose,
+  onTaskCreated,
+  defaultStatus,
+  task
+}) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [status, setStatus] = useState(defaultStatus);
@@ -62,7 +68,6 @@ const CreateTaskModal: React.FC<CreateTaskModalProps> = ({ isOpen, onClose, onTa
 
     try {
       if (task) {
-        // If editing a task, send a PATCH request
         await axiosInstance.patch(`/tasks/${task._id}`, {
           title,
           description,
@@ -71,7 +76,6 @@ const CreateTaskModal: React.FC<CreateTaskModalProps> = ({ isOpen, onClose, onTa
           deadline,
         });
       } else {
-        // If creating a new task, send a POST request
         await axiosInstance.post('/tasks', {
           title,
           description,
@@ -80,10 +84,23 @@ const CreateTaskModal: React.FC<CreateTaskModalProps> = ({ isOpen, onClose, onTa
           deadline,
         });
       }
-      
+
       onTaskCreated();
+      onClose();  
     } catch (err) {
       setError('Failed to save task.');
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!task?._id) return;
+
+    try {
+      await axiosInstance.delete(`/tasks/${task._id}`);
+      onTaskCreated(); 
+      onClose(); 
+    } catch (err) {
+      setError('Failed to delete task.');
     }
   };
 
@@ -235,13 +252,15 @@ const CreateTaskModal: React.FC<CreateTaskModalProps> = ({ isOpen, onClose, onTa
 
           {/* Action Buttons */}
           <div className="flex justify-end">
-            <button
-              type="button"
-              onClick={onClose}
-              className="bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 px-4 rounded mr-2"
-            >
-              Cancel
-            </button>
+            {task && (
+              <button
+                type="button"
+                onClick={handleDelete}
+                className="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded mr-2"
+              >
+                Delete
+              </button>
+            )}
             <button
               type="submit"
               className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"

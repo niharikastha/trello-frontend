@@ -58,7 +58,7 @@ const SignupForm: React.FC = () => {
       await axios.post('http://localhost:5000/api/auth/signup', { username: formattedUsername, email, password, confirmPassword });
       alert('Signup successful!');
       router.push('/login');
-    } catch (err) {
+    } catch (err: any) { 
       if (err.response && err.response.data.message) {
         setError(err.response.data.message);
       } else {
@@ -67,7 +67,7 @@ const SignupForm: React.FC = () => {
       }
     } finally {
       setIsSubmitting(false);
-    }
+    }    
   };
 
   return (

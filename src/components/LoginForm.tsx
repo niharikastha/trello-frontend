@@ -62,7 +62,7 @@ const LoginForm: React.FC = () => {
             Welcome to <span className="text-purple-600">Workflo!</span>
           </h1>
           {error && <p className="text-red-500 mb-4 text-center">{error}</p>}
-          
+
           <input
             type="email"
             value={email}
@@ -87,7 +87,7 @@ const LoginForm: React.FC = () => {
             {isSubmitting ? 'Logging in...' : 'Login'}
           </button>
           <div className="text-center mt-4">
-            <span className="text-sm text-gray-600">Don't have an account? </span>
+            <span className="text-sm text-gray-600">Don&apos;t have an account? </span>
             <a href="#" onClick={() => router.push('/signup')} className="text-purple-600">Sign up.</a>
           </div>
         </form>
