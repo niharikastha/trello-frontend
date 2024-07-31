@@ -1,5 +1,3 @@
-// components/CreateTaskModal.tsx
-
 import React, { useState, useEffect } from 'react';
 import axiosInstance from '../utils/axiosConfig';
 import { FaTimes, FaShareAlt, FaStar, FaRegSun, FaExclamationTriangle, FaCalendarAlt, FaRegEdit, FaPlus } from 'react-icons/fa';
@@ -20,7 +18,7 @@ const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [status, setStatus] = useState(defaultStatus); // Use defaultStatus here
-  const [priority, setPriority] = useState('Medium');
+  const [priority, setPriority] = useState('');
   const [deadline, setDeadline] = useState('');
   const [error, setError] = useState('');
 
@@ -34,14 +32,21 @@ const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
     setError('');
 
     try {
-      await axiosInstance.post('/tasks', {
+      const payload: any = {
         title,
         description,
         status,
         priority,
-        deadline,
-      });
+        ...(deadline && { deadline }),
+      };
+
+      await axiosInstance.post('/tasks', payload);
       onTaskCreated();
+      setTitle('');
+      setDescription('');
+      setPriority('');
+      setDeadline('');
+      setStatus(defaultStatus);
       onClose();
     } catch (err) {
       setError('Failed to create task.');
@@ -100,7 +105,7 @@ const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
               <option value="To-Do">To-Do</option>
               <option value="In Progress">In Progress</option>
               <option value="Under Review">Under Review</option>
-              <option value="Completed">Completed</option>
+              <option value="Finished">Finished</option>
             </select>
           </div>
 

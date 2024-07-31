@@ -17,9 +17,9 @@ const Header: React.FC<HeaderProps> = ({ onCreateNewTask }) => {
   }, []);
 
   return (
-    <div className="p-4">
+    <div className="pb-4">
       <div className="flex justify-between items-center mb-4">
-        <h1 className="text-2xl font-bold text-black">Good morning, {firstName}!</h1>
+        <h1 className="text-4xl font-bold text-black">Good morning, {firstName}!</h1>
         <button className="flex items-center hover:bg-purple-100 text-black py-2 px-4 rounded space-x-2">
           <span>Help & feedback</span>
           <FaQuestionCircle className="text-xl" />
@@ -29,22 +29,22 @@ const Header: React.FC<HeaderProps> = ({ onCreateNewTask }) => {
         <div className="bg-white p-3 rounded shadow-sm flex items-center space-x-2 text-gray-700 flex-1">
           <FaTags className="text-xl text-purple-600" />
           <div>
-            <h2 className="font-semibold">Introducing tags</h2>
-            <p className="text-sm text-gray-500">Easily categorize and find your notes by adding tags. Keep your workspace clutter-free and efficient.</p>
+            <h2 className="font-semibold text-gray-500">Introducing tags</h2>
+            <p className="text-sm text-gray-400">Easily categorize and find your notes by adding tags. Keep your workspace clutter-free and efficient.</p>
           </div>
         </div>
         <div className="bg-white p-3 rounded shadow-sm flex items-center space-x-2 text-gray-700 flex-1">
           <FaShareAlt className="text-xl text-purple-600" />
           <div>
-            <h2 className="font-semibold">Share Notes Instantly</h2>
-            <p className="text-sm text-gray-500">Effortlessly share your notes with others via email or link. Enhance collaboration with quick sharing options.</p>
+            <h2 className="font-semibold text-gray-500">Share Notes Instantly</h2>
+            <p className="text-sm text-gray-400">Effortlessly share your notes with others via email or link. Enhance collaboration with quick sharing options.</p>
           </div>
         </div>
         <div className="bg-white p-3 rounded shadow-sm flex items-center space-x-2 text-gray-700 flex-1">
           <FaMobileAlt className="text-xl text-purple-600" />
           <div>
-            <h2 className="font-semibold">Access Anywhere</h2>
-            <p className="text-sm text-gray-500">Sync your notes across all devices. Stay productive whether you're on your phone, tablet, or computer.</p>
+            <h2 className="font-semibold text-gray-500">Access Anywhere</h2>
+            <p className="text-sm text-gray-400">Sync your notes across all devices. Stay productive whether you're on your phone, tablet, or computer.</p>
           </div>
         </div>
       </div>
@@ -68,9 +68,9 @@ const Header: React.FC<HeaderProps> = ({ onCreateNewTask }) => {
         </button>
         <button 
           onClick={onCreateNewTask}
-          className="flex items-center bg-blue-600 hover:bg-blue-700 text-white py-2 px-5 rounded"
-        >
-          <FaPlus className="mr-2" /> Create New Task
+          className=" flex items-center text-white py-2 px-4 rounded"
+          style={{ background: 'linear-gradient(180deg, #4C38C2 0%, #2F2188 100%)' }}        >
+          Create New <FaPlus className="ml-2" />
         </button>
       </div>
     </div>

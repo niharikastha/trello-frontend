@@ -6,6 +6,7 @@
   --color-primary: #007bff;
   --color-text-dark: #333333;
   --color-text-light: #999999;
+  --color-text-gray: #7c7a7a;
   --gradient-start: #070707;
   --gradient-end: #1a1919;
 }
@@ -75,16 +76,16 @@ body {
 .column-title {
   font-size: 18px;
   font-weight: 500;
-  color: var(--color-text-dark);
+  color: var(--color-text-gray);
   margin-bottom: 10px;
 }
 
 .add-new-btn {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content:space-between;
   background-image: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
-  color: #fff;
+  color: #d1d0d0;
   padding: 10px;
   width: 100%;
   text-align: center;
@@ -288,4 +289,36 @@ body {
 .bg-dark-gray {
   background-color: #f1f1f1;
   color:#7e7e7e;
+}
+.column-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.custom-bars-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; 
+  gap: 4px;
+}
+
+.bar {
+  background-color: #b1b1b1; /* Adjust color as needed */
+  height: 2px; /* Base height for the smallest bar */
+  margin: 0; /* No extra margin around bars */
+  border-radius: 2px; 
+}
+
+.bar1 {
+  width: 8px; /* Width of the smallest bar */
+}
+
+.bar2 {
+  width: 12px; /* Width of the middle bar */
+}
+
+.bar3 {
+  width: 16px; /* Width of the largest bar */
 }

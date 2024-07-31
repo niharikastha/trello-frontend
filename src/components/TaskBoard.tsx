@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
 import axiosInstance from '../utils/axiosConfig';
-import { FaPlus, FaClock } from 'react-icons/fa';
+import { FaPlus, FaClock, FaBars } from 'react-icons/fa';
 import { formatDistanceToNow } from 'date-fns';
 import Sidebar from './Sidebar';
 import Header from './Header';
@@ -61,6 +61,11 @@ const TaskBoard: React.FC = () => {
     setIsModalOpen(true);
   };
 
+  const openModal = () => {
+    setIsModalOpen(true);
+    setModalStatus('To-Do'); 
+  };
+
   const onDragEnd = (result: DropResult) => {
     const { destination, source, draggableId } = result;
 
@@ -78,22 +83,29 @@ const TaskBoard: React.FC = () => {
       );
 
       setTasks(updatedTasks);
-      updateTaskStatus(draggableId, destination.droppableId);
+      // updateTaskStatus(draggableId, destination.droppableId);
     }
   };
 
   const formatDistance = (date: Date): string => {
-    const distance = formatDistanceToNow(date, { addSuffix: false });
+    const distance = formatDistanceToNow(date, {
+      addSuffix: true, 
+      includeSeconds: false,
+    });
+  
     return distance
-      .replace('day', 'd')
+      .replace('about ', '') // Remove "about "
       .replace('days', 'd')
-      .replace('hour', 'hr')
+      .replace('day', 'd')
       .replace('hours', 'hr')
-      .replace('minute', 'min')
+      .replace('hour', 'hr')
       .replace('minutes', 'min')
+      .replace('minute', 'min')
+      .replace('seconds', 'sec')
       .replace('second', 'sec')
-      .replace('seconds', 'sec');
+      .replace('less than a minute', '1 min');
   };
+  
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -110,7 +122,12 @@ const TaskBoard: React.FC = () => {
       Low: 'priority-low',
     };
 
-    const createdAtRelative = task.createdAt ? formatDistance(new Date(task.createdAt)) + ' ago' : '';
+    const createdAtRelative = task.createdAt ? formatDistance(new Date(task.createdAt)) : '';
+
+    const isValidDate = (dateString: string) => {
+      const date = new Date(dateString);
+      return !isNaN(date.getTime());
+    };
 
     return (
       <Draggable key={task._id} draggableId={task._id} index={index}>
@@ -128,11 +145,13 @@ const TaskBoard: React.FC = () => {
             <span className={`task-priority ${priorityColors[task.priority]}`}>
               {task.priority}
             </span>
+            {isValidDate(task.deadline) && (
             <div className="task-due-date">
               <FaClock className="time-icon" />
               <span>{formatDate(task.deadline)}</span>
             </div>
-            <div className="task-created-at">
+          )}
+             <div className="task-created-at">
               {createdAtRelative}
             </div>
           </li>
@@ -150,7 +169,14 @@ const TaskBoard: React.FC = () => {
             ref={provided.innerRef}
             {...provided.droppableProps}
           >
+            <div className="column-header">
             <h2 className="column-title">{title}</h2>
+            <div className="custom-bars-icon">
+              <div className="bar bar1"></div>
+              <div className="bar bar2"></div>
+              <div className="bar bar3"></div>
+            </div>
+          </div>
             <ul>
               {tasks.map((task, index) => (
                 <TaskCard
@@ -175,13 +201,13 @@ const TaskBoard: React.FC = () => {
 
   return (
     <div className="task-board">
-      <Sidebar />
+      <Sidebar onCreateNewTask={openModal} />
       <div className="sidebar-placeholder">Sidebar</div>
       <div className="main-content">
         <Header onCreateNewTask={() => handleAddNewClick('To-Do')} />
         <DragDropContext onDragEnd={onDragEnd}>
           <div className="task-columns">
-            {['To-Do', 'In Progress', 'Under Review', 'Completed'].map((column) => (
+            {['To-Do', 'In Progress', 'Under Review', 'Finished'].map((column) => (
               <TaskColumn
                 key={column}
                 title={column}
