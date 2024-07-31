@@ -1,6 +1,5 @@
 import axios from 'axios';
-import Router from 'next/router';  // Use Router from next/router
-
+import Router from 'next/router'; 
 const axiosInstance = axios.create({
   baseURL: 'http://localhost:5000/api', 
   headers: {
@@ -24,8 +23,8 @@ axiosInstance.interceptors.response.use(
     return response;
   },
   (error) => {
-    if (error.response && error.response.status === 401) { // Unauthorized
-      Router.push('/login');  // Use Router to navigate to login
+    if (error.response && error.response.status === 401) { 
+      Router.push('/login');  
     }
     return Promise.reject(error);
   }

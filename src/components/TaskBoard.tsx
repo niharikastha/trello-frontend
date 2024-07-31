@@ -24,7 +24,7 @@ const TaskBoard: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalStatus, setModalStatus] = useState<string>('To-Do');
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedTask, setSelectedTask] = useState<Task | null>(null); // New state for selected task
+  const [selectedTask, setSelectedTask] = useState<Task | null>(null); 
 
   useEffect(() => {
     fetchTasks();
@@ -58,13 +58,13 @@ const TaskBoard: React.FC = () => {
   };
 
   const handleAddNewClick = (status: string) => {
-    setSelectedTask(null); // Reset selected task
+    setSelectedTask(null);
     setModalStatus(status);
     setIsModalOpen(true);
   };
 
   const openModal = () => {
-    setSelectedTask(null); // Reset selected task
+    setSelectedTask(null);
     setIsModalOpen(true);
     setModalStatus('To-Do');
   };
@@ -131,20 +131,20 @@ const TaskBoard: React.FC = () => {
     };
 
     const handleCardClick = () => {
-      setSelectedTask(task); // Set the selected task
-      setIsModalOpen(true);  // Open the modal
+      setSelectedTask(task); 
+      setIsModalOpen(true);  
     };
 
     return (
       <Draggable key={task._id} draggableId={task._id} index={index}>
         {(provided) => (
-          <li
-            className="task-card"
-            ref={provided.innerRef}
-            {...provided.draggableProps}
-            {...provided.dragHandleProps}
-            onClick={handleCardClick} // Add click event to open modal
-          >
+         <div
+         className="task-card"
+         ref={(provided.innerRef)}
+         {...provided.draggableProps}
+         {...provided.dragHandleProps}
+         onClick={handleCardClick}
+       >
             <div className="task-card-header">
               <h3 className="task-title">{task.title}</h3>
             </div>
@@ -161,7 +161,7 @@ const TaskBoard: React.FC = () => {
             <div className="task-created-at">
               {createdAtRelative}
             </div>
-          </li>
+          </div>
         )}
       </Draggable>
     );
@@ -237,7 +237,7 @@ const TaskBoard: React.FC = () => {
         onClose={() => setIsModalOpen(false)}
         onTaskCreated={handleTaskCreated}
         defaultStatus={modalStatus}
-        task={selectedTask} // Pass the selected task to the modal
+        task={selectedTask} 
       />
     </div>
   );

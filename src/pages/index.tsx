@@ -3,10 +3,8 @@ import LoginForm from '../components/LoginForm';
 import SignupForm from '../components/SignupForm';
 
 const Home = () => {
-  // State to manage which form is currently displayed
   const [isLogin, setIsLogin] = useState(true);
 
-  // Toggle between Login and Signup forms
   const toggleForm = () => {
     setIsLogin(!isLogin);
   };

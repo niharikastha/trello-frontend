@@ -1,4 +1,3 @@
-// pages/task-board.tsx
 
 import React from 'react';
 import TaskBoard from '../../components/TaskBoard';

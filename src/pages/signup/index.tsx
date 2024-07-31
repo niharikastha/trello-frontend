@@ -1,5 +1,3 @@
-// src/pages/signup/index.tsx
-
 import SignupForm from '../../components/SignupForm';
 
 const Signup = () => {
