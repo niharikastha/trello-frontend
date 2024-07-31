@@ -55,7 +55,7 @@ const SignupForm: React.FC = () => {
 
     try {
       const formattedUsername = capitalizeWords(username);
-      await axios.post('http://localhost:5000/api/auth/signup', { username: formattedUsername, email, password, confirmPassword });
+      await axios.post('https://trello-backend-vert.vercel.app/api/auth/signup', { username: formattedUsername, email, password, confirmPassword });
       alert('Signup successful!');
       router.push('/login');
     } catch (err: any) { 

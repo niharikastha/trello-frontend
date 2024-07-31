@@ -42,7 +42,7 @@ const LoginForm: React.FC = () => {
     }
 
     try {
-      const { data } = await axios.post('http://localhost:5000/api/auth/login', { email, password });
+      const { data } = await axios.post('https://trello-backend-vert.vercel.app/api/auth/login', { email, password });
       localStorage.setItem('token', data.token);
       localStorage.setItem('user', data.user.username);
       alert('Login successful!');
