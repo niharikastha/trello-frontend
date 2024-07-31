@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
-import trelloIcon from '../../public/trello-icon.png'; // Adjust the path if necessary
+import trelloIcon from '../../public/trello-icon.png'; 
 
 const SignupForm: React.FC = () => {
   const [username, setUsername] = useState('');
@@ -21,7 +21,6 @@ const SignupForm: React.FC = () => {
   };
 
   const validatePassword = (password: string) => {
-    // Regex for password validation
     const passwordRegex = /^(?=.*[A-Z])(?=.*[\W_]).{8,}$/;
     return passwordRegex.test(password);
   };
@@ -31,14 +30,12 @@ const SignupForm: React.FC = () => {
     setIsSubmitting(true);
     setError('');
 
-    // Basic validation
     if (!username || !email || !password || !confirmPassword) {
       setError('Username, email, password, and confirm password are required.');
       setIsSubmitting(false);
       return;
     }
 
-    // Regex for email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       setError('Invalid email address.');
@@ -46,14 +43,12 @@ const SignupForm: React.FC = () => {
       return;
     }
 
-    // Check if passwords match
     if (password !== confirmPassword) {
       setError('Passwords do not match.');
       setIsSubmitting(false);
       return;
     }
 
-    // Validate password
     if (!validatePassword(password)) {
       setError('Password must be at least 8 characters long, contain at least one uppercase letter, and one special character.');
       setIsSubmitting(false);

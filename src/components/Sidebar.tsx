@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FaTasks, FaUser, FaCog, FaChartLine, FaPlus, FaChartBar, FaDownload, FaUserCircle } from 'react-icons/fa';
+import { useRouter } from 'next/router';
 
 interface SidebarProps {
   onCreateNewTask: () => void;
@@ -8,6 +9,7 @@ interface SidebarProps {
 const Sidebar: React.FC<SidebarProps> = ({ onCreateNewTask }) => {
   const [isDarkMode, setIsDarkMode] = useState<boolean>(true);
   const [username, setUsername] = useState<string>('');
+  const router = useRouter();
 
   useEffect(() => {
     const user = localStorage.getItem('user') || '';
@@ -27,6 +29,13 @@ const Sidebar: React.FC<SidebarProps> = ({ onCreateNewTask }) => {
     document.documentElement.classList.toggle('dark', newDarkModeState);
     localStorage.setItem('darkMode', newDarkModeState.toString());
   };
+  
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    router.push('/login');
+  };
+  
 
   return (
     <div className="bg-white p-4 shadow-md">
@@ -53,7 +62,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onCreateNewTask }) => {
                   style={{ left: '0.125rem', top: '0.125rem' }}
                 ></span>
               </label>
-              <button className="text-sm py-1.5 px-3 text-gray-500 hover:bg-gray-100 cursor-pointer hover:border-gray-300 rounded">
+              <button className="text-sm py-1.5 px-3 text-gray-500 hover:bg-gray-100 cursor-pointer hover:border-gray-300 rounded" onClick={()=>handleLogout()}>
                 Logout
               </button>
             </div>

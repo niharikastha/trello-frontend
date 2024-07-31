@@ -1,12 +1,13 @@
-// components/Header.tsx
 import React, { useEffect, useState } from 'react';
 import { FaTags, FaShareAlt, FaMobileAlt, FaSearch, FaPlus, FaCalendarAlt, FaStar, FaFilter, FaShareSquare, FaQuestionCircle } from 'react-icons/fa';
 
 interface HeaderProps {
   onCreateNewTask: () => void;
+  searchQuery: string; 
+  onSearchChange: (query: string) => void; 
 }
 
-const Header: React.FC<HeaderProps> = ({ onCreateNewTask }) => {
+const Header: React.FC<HeaderProps> = ({ onCreateNewTask, searchQuery, onSearchChange }) => {
   const [firstName, setFirstName] = useState('');
 
   useEffect(() => {
@@ -50,26 +51,33 @@ const Header: React.FC<HeaderProps> = ({ onCreateNewTask }) => {
       </div>
       <div className="flex items-center space-x-2">
         <div className="flex items-center w-1/4 bg-white border border-gray-300 rounded p-2">
-          <input type="text" placeholder="Search" className="flex-1 border-none outline-none" />
+          <input 
+            type="text" 
+            placeholder="Search" 
+            className="flex-1 border-none outline-none text-gray-600" 
+            value={searchQuery}
+            onChange={(e) => onSearchChange(e.target.value)} 
+          />
           <FaSearch className="text-gray-400 mr-2" />
         </div>
         <div className="flex-1"></div>
         <button className="flex items-center bg-dark-gray text-black rounded p-2">
-        Calendar view <FaCalendarAlt className="ml-2" />
+          Calendar view <FaCalendarAlt className="ml-2" />
         </button>
         <button className="flex items-center bg-dark-gray text-black rounded p-2">
-        Automation <FaStar className="ml-2" /> 
+          Automation <FaStar className="ml-2" />
         </button>
         <button className="flex items-center bg-dark-gray text-black rounded p-2">
-        Filter  <FaFilter className="ml-2" /> 
+          Filter  <FaFilter className="ml-2" />
         </button>
         <button className="flex items-center bg-dark-gray text-black rounded p-2">
-        Share  <FaShareSquare className="ml-2" /> 
+          Share  <FaShareSquare className="ml-2" />
         </button>
         <button 
           onClick={onCreateNewTask}
-          className=" flex items-center text-white py-2 px-4 rounded"
-          style={{ background: 'linear-gradient(180deg, #4C38C2 0%, #2F2188 100%)' }}        >
+          className="flex items-center text-white py-2 px-4 rounded"
+          style={{ background: 'linear-gradient(180deg, #4C38C2 0%, #2F2188 100%)' }}        
+        >
           Create New <FaPlus className="ml-2" />
         </button>
       </div>

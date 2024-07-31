@@ -18,7 +18,7 @@ const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [status, setStatus] = useState(defaultStatus); // Use defaultStatus here
-  const [priority, setPriority] = useState('');
+  const [priority, setPriority] = useState('Low'); // Default priority is 'Low'
   const [deadline, setDeadline] = useState('');
   const [error, setError] = useState('');
 
@@ -36,7 +36,7 @@ const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
         title,
         description,
         status,
-        priority,
+        priority, // This will now default to 'Low' if not changed
         ...(deadline && { deadline }),
       };
 
@@ -44,7 +44,7 @@ const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
       onTaskCreated();
       setTitle('');
       setDescription('');
-      setPriority('');
+      setPriority('Low'); // Reset priority to default value
       setDeadline('');
       setStatus(defaultStatus);
       onClose();

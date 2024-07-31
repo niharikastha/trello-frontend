@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
 import axiosInstance from '../utils/axiosConfig';
-import { FaPlus, FaClock, FaBars } from 'react-icons/fa';
+import { FaPlus, FaClock } from 'react-icons/fa';
 import { formatDistanceToNow } from 'date-fns';
 import Sidebar from './Sidebar';
 import Header from './Header';
 import CreateTaskModal from './CreateTaskModal';
 
-// Define Task interface
 interface Task {
   _id: string;
   title: string;
@@ -24,6 +23,7 @@ const TaskBoard: React.FC = () => {
   const [error, setError] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalStatus, setModalStatus] = useState<string>('To-Do');
+  const [searchQuery, setSearchQuery] = useState(''); 
 
   useEffect(() => {
     fetchTasks();
@@ -42,7 +42,7 @@ const TaskBoard: React.FC = () => {
 
   const updateTaskStatus = async (taskId: string, status: string) => {
     try {
-      const { data } = await axiosInstance.put(`/tasks/${taskId}`, { status });
+      const { data } = await axiosInstance.patch(`/tasks/${taskId}`, { status });
       setTasks((prevTasks) =>
         prevTasks.map((task) => (task._id === taskId ? data : task))
       );
@@ -63,38 +63,37 @@ const TaskBoard: React.FC = () => {
 
   const openModal = () => {
     setIsModalOpen(true);
-    setModalStatus('To-Do'); 
+    setModalStatus('To-Do');
   };
 
   const onDragEnd = (result: DropResult) => {
     const { destination, source, draggableId } = result;
 
-    if (!destination) {
+    if (!destination || (destination.droppableId === source.droppableId && destination.index === source.index)) {
       return;
     }
 
-    if (destination.droppableId === source.droppableId && destination.index === source.index) {
-      return;
-    } else {
-      const updatedTasks = tasks.map(task =>
-        task._id === draggableId
-          ? { ...task, status: destination.droppableId }
-          : task
-      );
+    const updatedTasks = tasks.map(task =>
+      task._id === draggableId
+        ? { ...task, status: destination.droppableId }
+        : task
+    );
 
-      setTasks(updatedTasks);
-      // updateTaskStatus(draggableId, destination.droppableId);
-    }
+    setTasks(updatedTasks);
+
+    updateTaskStatus(draggableId, destination.droppableId).catch(() => {
+      setTasks(tasks);
+    });
   };
 
   const formatDistance = (date: Date): string => {
     const distance = formatDistanceToNow(date, {
-      addSuffix: true, 
+      addSuffix: true,
       includeSeconds: false,
     });
-  
+
     return distance
-      .replace('about ', '') // Remove "about "
+      .replace('about ', '') 
       .replace('days', 'd')
       .replace('day', 'd')
       .replace('hours', 'hr')
@@ -105,7 +104,6 @@ const TaskBoard: React.FC = () => {
       .replace('second', 'sec')
       .replace('less than a minute', '1 min');
   };
-  
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -146,12 +144,12 @@ const TaskBoard: React.FC = () => {
               {task.priority}
             </span>
             {isValidDate(task.deadline) && (
-            <div className="task-due-date">
-              <FaClock className="time-icon" />
-              <span>{formatDate(task.deadline)}</span>
-            </div>
-          )}
-             <div className="task-created-at">
+              <div className="task-due-date">
+                <FaClock className="time-icon" />
+                <span>{formatDate(task.deadline)}</span>
+              </div>
+            )}
+            <div className="task-created-at">
               {createdAtRelative}
             </div>
           </li>
@@ -170,13 +168,13 @@ const TaskBoard: React.FC = () => {
             {...provided.droppableProps}
           >
             <div className="column-header">
-            <h2 className="column-title">{title}</h2>
-            <div className="custom-bars-icon">
-              <div className="bar bar1"></div>
-              <div className="bar bar2"></div>
-              <div className="bar bar3"></div>
+              <h2 className="column-title">{title}</h2>
+              <div className="custom-bars-icon">
+                <div className="bar bar1"></div>
+                <div className="bar bar2"></div>
+                <div className="bar bar3"></div>
+              </div>
             </div>
-          </div>
             <ul>
               {tasks.map((task, index) => (
                 <TaskCard
@@ -196,6 +194,10 @@ const TaskBoard: React.FC = () => {
     );
   };
 
+  const filteredTasks = tasks.filter(task =>
+    task.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
 
@@ -204,14 +206,18 @@ const TaskBoard: React.FC = () => {
       <Sidebar onCreateNewTask={openModal} />
       <div className="sidebar-placeholder">Sidebar</div>
       <div className="main-content">
-        <Header onCreateNewTask={() => handleAddNewClick('To-Do')} />
+        <Header 
+          onCreateNewTask={() => handleAddNewClick('To-Do')}
+          searchQuery={searchQuery} 
+          onSearchChange={(query) => setSearchQuery(query)} 
+        />
         <DragDropContext onDragEnd={onDragEnd}>
           <div className="task-columns">
             {['To-Do', 'In Progress', 'Under Review', 'Finished'].map((column) => (
               <TaskColumn
                 key={column}
                 title={column}
-                tasks={tasks.filter((task) => task.status === column)}
+                tasks={filteredTasks.filter((task) => task.status === column)} 
               />
             ))}
           </div>

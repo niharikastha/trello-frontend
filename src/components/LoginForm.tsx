@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
-import trelloIcon from '../../public/trello-icon.png'; // Adjust the path if necessary
+import trelloIcon from '../../public/trello-icon.png';
 
 const LoginForm: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -12,13 +12,11 @@ const LoginForm: React.FC = () => {
   const router = useRouter();
 
   const validateEmail = (email: string) => {
-    // Regex for email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   };
 
   const validatePassword = (password: string) => {
-    // Basic validation for non-empty password
     return password.trim() !== '';
   };
 
@@ -27,21 +25,18 @@ const LoginForm: React.FC = () => {
     setIsSubmitting(true);
     setError('');
 
-    // Basic validation
     if (!email || !password) {
       setError('Email and password are required.');
       setIsSubmitting(false);
       return;
     }
 
-    // Email validation
     if (!validateEmail(email)) {
       setError('Invalid email address.');
       setIsSubmitting(false);
       return;
     }
 
-    // Password validation
     if (!validatePassword(password)) {
       setError('Password cannot be empty.');
       setIsSubmitting(false);
@@ -50,7 +45,6 @@ const LoginForm: React.FC = () => {
 
     try {
       const { data } = await axios.post('http://localhost:5000/api/auth/login', { email, password });
-      console.log("🚀 ~ handleSubmit ~ data:", data)
       localStorage.setItem('token', data.token);
       localStorage.setItem('user', data.user.username);
       alert('Login successful!');
