@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/router';
-import Image from 'next/image';
-import trelloIcon from '../../public/trello-icon.png'; 
 
 const SignupForm: React.FC = () => {
   const [username, setUsername] = useState('');
@@ -59,7 +57,7 @@ const SignupForm: React.FC = () => {
       const formattedUsername = capitalizeWords(username);
       await axios.post('http://localhost:5000/api/auth/signup', { username: formattedUsername, email, password, confirmPassword });
       alert('Signup successful!');
-      router.push('/');
+      router.push('/login');
     } catch (err) {
       if (err.response && err.response.data.message) {
         setError(err.response.data.message);
@@ -73,70 +71,59 @@ const SignupForm: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center ">
-      <div className="text-center mb-8">
-        <Image src={trelloIcon} alt="Trello Icon" width={140} height={120} className="mx-auto mb-4" />
-      </div>
-
-      <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-md w-full max-w-md mx-auto">
-        {error && <p className="text-red-500 mb-4 text-center">{error}</p>}
-
-        <label className="block mb-4">
-          <span className="text-gray-700 text-sm font-medium">Username</span>
+    <div className="flex items-center justify-center w-full h-screen bg-gradient-to-b from-gray-200 to-gray-500">
+      <div className="w-full max-w-md">
+        <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-lg">
+          <h1 className="text-3xl font-bold text-center mb-6 text-black">
+            Welcome to <span className="text-purple-600">Workflo!</span>
+          </h1>
+          {error && <p className="text-red-500 mb-4 text-center">{error}</p>}
+          
           <input
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            className="mt-1 block w-full border-gray-300 shadow-sm bg-gray-50 text-black placeholder-gray-400 pl-2 focus:ring-blue-500 focus:border-blue-500"
-            placeholder="Enter your username"
+            className="mb-4 w-full p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-300 bg-gray-200 text-gray-600"
+            placeholder="User name"
             required
           />
-        </label>
-
-        <label className="block mb-4">
-          <span className="text-gray-700 text-sm font-medium">Email</span>
           <input
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="mt-1 block w-full border-gray-300 shadow-sm bg-gray-50 text-black placeholder-gray-400 pl-2 focus:ring-blue-500 focus:border-blue-500"
-            placeholder="Enter your email"
+            className="mb-4 w-full p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-300 bg-gray-200 text-gray-600"
+            placeholder="Your email"
             required
           />
-        </label>
-
-        <label className="block mb-4">
-          <span className="text-gray-700 text-sm font-medium">Password</span>
           <input
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="mt-1 block w-full border-gray-300 shadow-sm bg-gray-50 text-black placeholder-gray-400 pl-2 focus:ring-blue-500 focus:border-blue-500"
-            placeholder="Enter your password"
+            className="mb-4 w-full p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-300 bg-gray-200 text-gray-600"
+            placeholder="Password"
             required
           />
-        </label>
-
-        <label className="block mb-6">
-          <span className="text-gray-700 text-sm font-medium">Confirm Password</span>
           <input
             type="password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
-            className="mt-1 block w-full border-gray-300 shadow-sm bg-gray-50 text-black placeholder-gray-400 pl-2 focus:ring-blue-500 focus:border-blue-500"
-            placeholder="Confirm your password"
+            className="mb-4 w-full p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-300 bg-gray-200 text-gray-600"
+            placeholder="Confirm Password"
             required
           />
-        </label>
-
-        <button 
-          type="submit" 
-          className="bg-blue-500 text-white p-2 rounded-lg w-full hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-          disabled={isSubmitting}
-        >
-          {isSubmitting ? 'Signing up...' : 'Signup'}
-        </button>
-      </form>
+          <button
+            type="submit"
+            className="w-full bg-purple-500 text-white p-2 rounded-lg hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-500"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? 'Signing up...' : 'Sign up'}
+          </button>
+          <div className="text-center mt-4">
+            <span className="text-sm text-gray-600">Already have an account? </span>
+            <a href="#" onClick={() => router.push('/login')} className="text-purple-600">Log in.</a>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };

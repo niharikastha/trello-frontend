@@ -11,54 +11,79 @@ import {
   FaPlus
 } from "react-icons/fa";
 
+interface Task {
+  _id: string;
+  title: string;
+  description: string;
+  status: string;
+  priority: 'Urgent' | 'Medium' | 'Low';
+  deadline: string;
+}
+
 interface CreateTaskModalProps {
   isOpen: boolean;
   onClose: () => void;
   onTaskCreated: () => void;
   defaultStatus: string;
+  task?: Task | null; // Optional prop for editing
 }
 
-const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
-  isOpen,
-  onClose,
-  onTaskCreated,
-  defaultStatus,
-}) => {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [status, setStatus] = useState(defaultStatus); // Use defaultStatus here
-  const [priority, setPriority] = useState("Low"); // Default priority is 'Low'
-  const [deadline, setDeadline] = useState("");
-  const [error, setError] = useState("");
+const CreateTaskModal: React.FC<CreateTaskModalProps> = ({ isOpen, onClose, onTaskCreated, defaultStatus, task }) => {
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [status, setStatus] = useState(defaultStatus);
+  const [priority, setPriority] = useState('');
+  const [deadline, setDeadline] = useState('');
+  const [error, setError] = useState('');
 
-  // Update status when defaultStatus changes
   useEffect(() => {
-    setStatus(defaultStatus);
-  }, [defaultStatus]);
+    if (task) {
+      setTitle(task.title);
+      setDescription(task.description);
+      setStatus(task.status);
+      setPriority(task.priority);
+      setDeadline(task.deadline);
+    } else {
+      setTitle('');
+      setDescription('');
+      setStatus(defaultStatus);
+      setPriority('');
+      setDeadline('');
+    }
+  }, [task, defaultStatus]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
+
+    if (!title || !description || !status) {
+      setError('Please fill in all required fields.');
+      return;
+    }
 
     try {
-      const payload: any = {
-        title,
-        description,
-        status,
-        priority, // This will now default to 'Low' if not changed
-        ...(deadline && { deadline }),
-      };
-
-      await axiosInstance.post("/tasks", payload);
+      if (task) {
+        // If editing a task, send a PATCH request
+        await axiosInstance.patch(`/tasks/${task._id}`, {
+          title,
+          description,
+          status,
+          priority: priority || 'Low',
+          deadline,
+        });
+      } else {
+        // If creating a new task, send a POST request
+        await axiosInstance.post('/tasks', {
+          title,
+          description,
+          status,
+          priority: priority || 'Low',
+          deadline,
+        });
+      }
+      
       onTaskCreated();
-      setTitle("");
-      setDescription("");
-      setPriority("Low"); // Reset priority to default value
-      setDeadline("");
-      setStatus(defaultStatus);
-      onClose();
     } catch (err) {
-      setError("Failed to create task.");
+      setError('Failed to save task.');
     }
   };
 
@@ -70,7 +95,6 @@ const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
         }`}
     >
       <div className="bg-white p-6 rounded-lg shadow-lg h-full w-1/2 overflow-y-auto">
-
         <div className="flex justify-between items-center mb-4">
           <div className="flex items-center space-x-2">
             <button
@@ -213,20 +237,19 @@ const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
           <div className="flex justify-end">
             <button
               type="button"
-              onClick={deleteModal}
+              onClick={onClose}
               className="bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 px-4 rounded mr-2"
             >
-              Delete
+              Cancel
             </button>
             <button
               type="submit"
               className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
             >
-              Create Task
+              {task ? 'Update Task' : 'Create Task'}
             </button>
           </div>
         </form>
-
       </div>
     </div>
   );
