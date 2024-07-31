@@ -54,17 +54,17 @@ const Header: React.FC<HeaderProps> = ({ onCreateNewTask }) => {
           <FaSearch className="text-gray-400 mr-2" />
         </div>
         <div className="flex-1"></div>
-        <button className="flex items-center bg-white text-black border border-gray-300 rounded p-2">
-          <FaCalendarAlt className="mr-2" /> Calendar view
+        <button className="flex items-center bg-dark-gray text-black rounded p-2">
+        Calendar view <FaCalendarAlt className="ml-2" />
         </button>
-        <button className="flex items-center bg-white text-black border border-gray-300 rounded p-2">
-          <FaStar className="mr-2" /> Automation
+        <button className="flex items-center bg-dark-gray text-black rounded p-2">
+        Automation <FaStar className="ml-2" /> 
         </button>
-        <button className="flex items-center bg-white text-black border border-gray-300 rounded p-2">
-          <FaFilter className="mr-2" /> Filter
+        <button className="flex items-center bg-dark-gray text-black rounded p-2">
+        Filter  <FaFilter className="ml-2" /> 
         </button>
-        <button className="flex items-center bg-white text-black border border-gray-300 rounded p-2">
-          <FaShareSquare className="mr-2" /> Share
+        <button className="flex items-center bg-dark-gray text-black rounded p-2">
+        Share  <FaShareSquare className="ml-2" /> 
         </button>
         <button 
           onClick={onCreateNewTask}

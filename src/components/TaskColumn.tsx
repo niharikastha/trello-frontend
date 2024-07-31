@@ -1,15 +1,15 @@
-// components/TaskColumn.tsx
-
 import React from 'react';
+import { Droppable } from 'react-beautiful-dnd';
 import TaskCard from './TaskCard';
-import { FaPlus } from 'react-icons/fa'; // Import the plus icon
+import { FaPlus } from 'react-icons/fa';
 
+// Define Task interface
 interface Task {
   _id: string;
   title: string;
   description: string;
   status: string;
-  priority: string;
+  priority: 'Urgent' | 'Medium' | 'Low';
   deadline: string;
   createdAt?: string;
 }
@@ -21,26 +21,33 @@ interface TaskColumnProps {
   onAddNewClick: (status: string) => void;
 }
 
-const TaskColumn: React.FC<TaskColumnProps> = ({
-  title,
-  tasks,
-  updateTaskStatus,
-  onAddNewClick,
-}) => {
-  console.log('aksbfkj', tasks);
+const TaskColumn: React.FC<{ title: string; tasks: Task[]; }> = ({ title, tasks }) => {
   return (
-    <div className="task-column">
-      <h2 className="column-title">{title}</h2>
-      <ul>
-        {tasks.map((task) => (
-          <TaskCard key={task._id} task={task} updateTaskStatus={updateTaskStatus} />
-        ))}
-      </ul>
-      <button onClick={() => onAddNewClick(title)} className="add-new-btn">
-        Add new <FaPlus className="plus-icon" />
-      </button>
-    </div>
-  );
-};
+        <Droppable droppableId={title} direction="vertical">
+          {(provided) => (
+            <div
+              className="task-column"
+              ref={provided.innerRef}
+              {...provided.droppableProps}
+            >
+              <h2 className="column-title">{title}</h2>
+              <ul>
+                {tasks.map((task, index) => (
+                  <TaskCard
+                    key={task._id}
+                    task={task}
+                    index={index}
+                  />
+                ))}
+                {provided.placeholder}
+              </ul>
+              <button onClick={() => handleAddNewClick(title)} className="add-new-btn">
+                Add new <FaPlus className="plus-icon" />
+              </button>
+            </div>
+          )}
+        </Droppable>
+      );
+    };
 
 export default TaskColumn;
