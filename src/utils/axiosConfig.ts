@@ -2,9 +2,7 @@ import axios from 'axios';
 import Router from 'next/router'; 
 const axiosInstance = axios.create({
   baseURL: 'https://trello-backend-vert.vercel.app/api', 
-  headers: {
-    'Content-Type': 'application/json',
-  },
+  withCredentials: true, 
 });
 
 axiosInstance.defaults.withCredentials = true;
