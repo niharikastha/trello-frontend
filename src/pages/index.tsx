@@ -10,11 +10,7 @@ const Home = () => {
   };
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-8 bg-gray-100">
-      <div className="w-full max-w-md bg-white p-8 rounded shadow-lg">
-        <h1 className="text-3xl font-bold mb-6 text-center">
-          {isLogin ? 'Login' : 'Sign Up'}
-        </h1>
+    <main className="flex min-h-screen flex-col items-center justify-center bg-gray-100">
         
         {isLogin ? <LoginForm /> : <SignupForm />}
 
@@ -26,7 +22,6 @@ const Home = () => {
             {isLogin ? 'Need an account? Sign Up' : 'Already have an account? Login'}
           </button>
         </div>
-      </div>
     </main>
   );
 };

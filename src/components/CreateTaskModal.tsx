@@ -8,7 +8,8 @@ import {
   FaExclamationTriangle,
   FaCalendarAlt,
   FaRegEdit,
-  FaPlus
+  FaPlus,
+  FaExpand
 } from "react-icons/fa";
 
 interface Task {
@@ -121,37 +122,10 @@ const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
               <FaTimes size={24} />
             </button>
             <button
+              onClick={onClose}
               className="text-gray-500 hover:text-gray-800"
-              title="Maximize"
-              style={{ display: 'flex', alignItems: 'center' }}
             >
-              <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                className="text-gray-500"
-              >
-                <path
-                  d="M5 12h14"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                />
-                <path
-                  d="M11 5l7 7-7 7"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                />
-                <path
-                  d="M13 5l-7 7 7 7"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                />
-              </svg>
+              <FaExpand size={18} />
             </button>
           </div>
           <div className="flex space-x-4">
@@ -176,7 +150,7 @@ const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
               placeholder="Title"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full border border-gray-300 p-2 text-4xl text-black placeholder-gray-400 focus:outline-none"
+              className="w-full p-2 text-4xl text-gray-700 placeholder-gray-400 focus:outline-none"
               required
             />
           </div>
